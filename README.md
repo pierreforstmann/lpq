@@ -6,6 +6,6 @@ make
 
 ./testlibpq3 postgresql://pierre@localhost
 
-/test0 postgresql://pierre@localhost
+./test0 postgresql://pierre@localhost
 
 ```
