@@ -92,7 +92,7 @@ main(int argc, char **argv)
     res = PQprepare(conn,
 		    "test0", /* statement name */
                     "SELECT * FROM test0 WHERE t LIKE $1 OR i >= $2",
-                     2,      /* 2 parameters */
+                     2,      /* number of parameters */
                      NULL);  /* parameter types */
    
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
@@ -108,7 +108,7 @@ main(int argc, char **argv)
 
     res= PQexecPrepared(conn,
                         "test0",
-                        2,     /* one param */
+                        2,     /* number of parameters */
                         paramValues,
                         NULL,  /* parameter lengths */
     		        NULL,  /* parameter formats */
