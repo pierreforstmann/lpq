@@ -69,7 +69,7 @@ main(int argc, char **argv)
     }
 
     /* Set always-secure search path, so malicious users can't take control. */
-    res = PQexec(conn, "SET search_path = test1");
+    res = PQexec(conn, "SET search_path = test2");
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
     {
         fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
@@ -82,7 +82,7 @@ main(int argc, char **argv)
      * EXECUTE
      */
 
-    res = PQexec(conn, "SELECT * FROM test1 WHERE t LIKE 'H%' OR i >= 1");
+    res = PQexec(conn, "SELECT * FROM test2 WHERE t LIKE 'H%' OR i >= 1");
 
 
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
