@@ -43,7 +43,7 @@ main(int argc, char **argv)
     const char *conninfo;
     PGconn     *conn;
     PGresult   *res;
-    const char *paramValues[1];
+    const char *paramValues[2];
     int         paramLengths[1];
     int         paramFormats[1];
     uint32_t    binaryIntVal;
@@ -81,8 +81,8 @@ main(int argc, char **argv)
     }
     PQclear(res);
 
-    /* Here is our out-of-line parameter value */
-    paramValues[0] = "Hello";
+    paramValues[0] = "H%";
+    paramValues[1] = "1";
 
     /*
      * PREPARE
@@ -90,8 +90,8 @@ main(int argc, char **argv)
 
     res = PQprepare(conn,
 		    "test0", /* statement name */
-                    "SELECT * FROM test0 WHERE t = $1",
-                     1,      /* one param */
+                    "SELECT * FROM test0 WHERE t LIKE $1 OR i >= $2",
+                     2,      /* one param */
                      NULL);  /* parameter types */
    
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
@@ -107,7 +107,7 @@ main(int argc, char **argv)
 
     res= PQexecPrepared(conn,
                         "test0",
-                        1,     /* one param */
+                        2,     /* one param */
                         paramValues,
                         NULL,  /* parameter lengths */
     		        NULL,  /* parameter formats */
