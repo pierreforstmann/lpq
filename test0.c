@@ -9,7 +9,8 @@
  *
  *      Test prepared statements.
  *
- * Before running this, populate a database with the following commands
+ * Before running this, populate a database with the following commands 
+ * (see test0.sql)
  *
  * CREATE SCHEMA test0;
  * SET search_path = test0;
@@ -44,8 +45,8 @@ main(int argc, char **argv)
     PGconn     *conn;
     PGresult   *res;
     const char *paramValues[2];
-    int         paramLengths[1];
-    int         paramFormats[1];
+    int         paramLengths[2];
+    int         paramFormats[2];
     uint32_t    binaryIntVal;
     int		nFields;
     int		i;
@@ -91,7 +92,7 @@ main(int argc, char **argv)
     res = PQprepare(conn,
 		    "test0", /* statement name */
                     "SELECT * FROM test0 WHERE t LIKE $1 OR i >= $2",
-                     2,      /* one param */
+                     2,      /* 2 parameters */
                      NULL);  /* parameter types */
    
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
@@ -121,7 +122,7 @@ main(int argc, char **argv)
     }
 
     /*
-     * retrieve results
+     * FETCH: retrieve results
      */
 
     /* first, print out the attribute names */
