@@ -5,18 +5,18 @@
  *
  * Portions Copyright(c) 2023 Pierre Forstmann
  *
- * test1.c
+ * test2.c
  *
- *      Test PQexecParams.
+ *      Test PQexec.
  *
  * Before running this, populate a database with the following commands 
- * (see test1.sql)
+ * (see test2.sql)
  *
- * CREATE SCHEMA test1;
- * SET search_path = test1;
- * CREATE TABLE test1 (i int4, t text);
- * INSERT INTO test1 values (1, 'Hello');
- * INSERT INTO testr values (1, 'Goodbye');
+ * CREATE SCHEMA test2;
+ * SET search_path = test2;
+ * CREATE TABLE test2 (i int4, t text);
+ * INSERT INTO test2 values (1, 'Hello');
+ * INSERT INTO test2 values (1, 'Goodbye');
  *
  */
 
@@ -44,10 +44,6 @@ main(int argc, char **argv)
     const char *conninfo;
     PGconn     *conn;
     PGresult   *res;
-    const char *paramValues[2];
-    int         paramLengths[2];
-    int         paramFormats[2];
-    uint32_t    binaryIntVal;
     int		nFields;
     int		i;
     int		j;
@@ -82,21 +78,11 @@ main(int argc, char **argv)
     }
     PQclear(res);
 
-    paramValues[0] = "H%";
-    paramValues[1] = "1";
-
     /*
      * EXECUTE
      */
 
-    res = PQexecParams(conn,
-                       "SELECT * FROM test1 WHERE t LIKE $1 OR i >= $2",
-                       2,       /* number of parameters */
-                       NULL,    /* let the backend deduce param type */
-                       paramValues,
-                       NULL,    /* don't need param lengths since text */
-                       NULL,    /* default to all text params */
-                       0);      /* ask for text results */
+    res = PQexec(conn, "SELECT * FROM test1 WHERE t LIKE 'H%' OR i >= 1");
 
 
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
